@@ -24,7 +24,7 @@ def main(file, person_name, detect_faces, predictor):
             face_encoding = predictor(frame, face_location)
             face_descriptor = face_rec.compute_face_descriptor(frame, face_encoding, 1)
             # Save encoding in a numpy file
-            np.save("face_encodings/"+person_name, np.array(face_descriptor))
+            np.save("faces/"+person_name, np.array(face_descriptor))
     else:
         print("Either no face or more then one face detected. Please check the image file again")
                 
