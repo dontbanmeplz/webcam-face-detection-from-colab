@@ -6,7 +6,7 @@ import os
 import glob
 
 class detect:
-  def __init__():
+  def __init__(self):
     self.known_face_encodings = []
     self.known_face_names = []
     for face in glob.glob(os.path.join(os.getcwd(), "faces", "*.npy")):
