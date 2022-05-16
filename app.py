@@ -11,6 +11,7 @@ import base64
 import io
 from imageio import imread
 import matplotlib.pyplot as plt
+import detect
 
 app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(stdout))
@@ -18,7 +19,7 @@ app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
 socketio = SocketIO(app)
 camera = Camera(Makeup_artist())
-faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+det = detect.detect()
 
 @socketio.on('input image', namespace='/test')
 def test_message(input):
@@ -28,16 +29,8 @@ def test_message(input):
     #image_data = image_data.decode("utf-8")
 
     img = imread(io.BytesIO(base64.b64decode(image_data)))
+    img = det.detect(img)
     cv2_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-    faces = faceCascade.detectMultiScale(
-    cv2_img,
-    scaleFactor=1.1,
-    minNeighbors=5,
-    minSize=(30, 30),
-    flags = cv2.CASCADE_SCALE_IMAGE
-    )
-    for (x, y, w, h) in faces:
-    	cv2.rectangle(cv2_img, (x, y), (x+w, y+h), (0, 255, 0), 2)
     cv2.imwrite("reconstructed.jpg", cv2_img)
     retval, buffer = cv2.imencode('.jpg', cv2_img)
     b = base64.b64encode(buffer)
