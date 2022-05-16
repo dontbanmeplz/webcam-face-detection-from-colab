@@ -13,7 +13,7 @@ class detect:
     	    temp = np.load(face)
     	    self.known_face_encodings.append(temp)
     	    self.known_face_names.append(os.path.basename(face[:-4]))
-  def detect(frame):
+  def detect(self, frame):
     rgb_frame = frame[:, :, ::-1]
 
     face_locations = face_recognition.face_locations(rgb_frame)
